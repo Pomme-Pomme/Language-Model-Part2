@@ -2,6 +2,7 @@ package langModel;
 
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -36,7 +37,7 @@ public class MyNgramCounts implements NgramCounts {
 	 * Constructor.
 	 */
 	public MyNgramCounts(){
-		//TODO
+		ngramCounts = new HashMap<String, Integer>();
 	}
 
 
@@ -49,42 +50,37 @@ public class MyNgramCounts implements NgramCounts {
 	 * @param order the maximal order of n-grams considered.
 	 */
 	private void setMaximalOrder (int order) {
-		// TODO Auto-generated method stub
+		this.order=order;
 	}
 
 	
 	@Override
 	public int getMaximalOrder() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.order;
 	}
 
 	
 	@Override
 	public int getNgramCounterSize() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.ngramCounts.size();
 	}
 
 	
 	@Override
 	public int getTotalWordNumber(){
-		// TODO Auto-generated method stub
-		return 0;
+		return this.nbWordsTotal;
 	}
 	
 	
 	@Override
 	public Set<String> getNgrams() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.ngramCounts.keySet();
 	}
 
 	
 	@Override
 	public int getCounts(String ngram) {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.ngramCounts.get(ngram);
 	}
 	
 
