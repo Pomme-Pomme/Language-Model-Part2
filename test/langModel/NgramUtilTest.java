@@ -2,6 +2,8 @@ package langModel;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -48,7 +50,27 @@ public class NgramUtilTest {
 	 */
 	@Test
 	public void testGenerateNgrams() {
-		fail("Not yet implemented");
+		System.out.println(NgramUtil.generateNgrams(sentence, 1, 2));
+		ArrayList<String> listTest = new ArrayList<String>();
+		listTest.add("<s>");
+		listTest.add("cette");
+		listTest.add("phrase");
+		listTest.add("est");
+		listTest.add("de");
+		listTest.add("taille");
+		listTest.add("9");
+		listTest.add(".");
+		listTest.add("</s>");
+		listTest.add("<s> cette");
+		listTest.add("cette phrase");
+		listTest.add("phrase est");
+		listTest.add("est de");
+		listTest.add("de taille");
+		listTest.add("taille 9");
+		listTest.add("9 .");
+		listTest.add(". </s>");
+		
+		assertEquals(listTest,NgramUtil.generateNgrams(sentence, 1, 2) );
 	}
 
 	
@@ -57,7 +79,10 @@ public class NgramUtilTest {
 	 */
 	@Test
 	public void testGetHistory() {
-		fail("Not yet implemented");
+		assertEquals("historique de cet", NgramUtil.getHistory(ngram, 4));
+		assertEquals("de cet", NgramUtil.getHistory(ngram, 3));
+		assertEquals("cet", NgramUtil.getHistory(ngram, 2));
+		assertEquals("", NgramUtil.getHistory(ngram, 1));
 	}
 
 	
@@ -66,7 +91,19 @@ public class NgramUtilTest {
 	 */
 	@Test
 	public void testDecomposeIntoNgrams() {
-		fail("Not yet implemented");
+		System.out.println(NgramUtil.decomposeIntoNgrams(sentence, 2));
+		ArrayList<String> listTest = new ArrayList<String>();
+		listTest.add("<s>");
+		listTest.add("<s> cette");
+		listTest.add("cette phrase");
+		listTest.add("phrase est");
+		listTest.add("est de");
+		listTest.add("de taille");
+		listTest.add("taille 9");
+		listTest.add("9 .");
+		listTest.add(". </s>");
+		
+		assertEquals(listTest,NgramUtil.decomposeIntoNgrams(sentence, 2) );	
 	}
 	
 	

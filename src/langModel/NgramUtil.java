@@ -1,6 +1,7 @@
 package langModel;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,8 +21,10 @@ public class NgramUtil {
 	 * @return the number of words of the given sequence.
 	 */
 	public static int getSequenceSize (String sequence) {
-		//TODO
-		return -1;
+		//On découpe la phrase
+		String[] passage = (sequence.trim()).split("\\s+");
+		//On compte le nombre de mots
+		return passage.length;
 	}
 
 	
@@ -52,8 +55,24 @@ public class NgramUtil {
 	 * @return a list of generated n-grams from the sentence.
 	 */
 	public static List<String> generateNgrams (String sentence, int minOrder, int maxOrder) {
-		//TODO
-		return null;
+		
+		String[] passage = (sentence.trim()).split("\\s+");
+		
+		ArrayList<String> ngram = new ArrayList<String>();
+		
+		
+		
+		for(int n=minOrder; n<=maxOrder; n++){
+			for(int i = 0; i <= passage.length-n; i++){
+				String parsedSentence="";
+					for(int j = i; j <= i+n-1; j++){
+						parsedSentence = parsedSentence + " " +passage[j];
+					}
+				ngram.add(parsedSentence.trim());	
+			}
+		}
+		
+		return ngram;
 	}
 
 
@@ -71,9 +90,16 @@ public class NgramUtil {
 	 * @return history of the given n-gram (the length of the history is order-1).  
 	 */
 	public static String getHistory (String ngram, int order) {
-		//TODO
+		//On découpe la phrase
+		String[] passage = (ngram.trim()).split("\\s+");
+		String solution = "";
 		
-		return "";
+		if(passage.length>=order){
+			for(int i=passage.length-2; i >= passage.length-order; i--){
+				solution = passage[i] + " " + solution;
+			}
+		}
+		return solution.trim();
 	}
 
 	
@@ -93,8 +119,43 @@ public class NgramUtil {
 	 * @return the list of n-grams constructed from the sentence.
 	 */
 	public static List<String> decomposeIntoNgrams (String sentence, int order) {
-		//TODO
-		return null;
+		
+		String[] passage = (sentence.trim()).split("\\s+");
+		String parsedSentence="";
+		
+		ArrayList<String> ngram = new ArrayList<String>();
+		
+		int nbrBoucle = Math.min(order, passage.length+1);
+		
+		
+			for(int l=1;l<nbrBoucle;l++){
+				parsedSentence="";
+				for(int b=0; b<l && b<passage.length; b++){
+					parsedSentence = parsedSentence + " " +passage[b];
+				}
+				ngram.add(parsedSentence.trim());
+			}
+		
+			for(int i = 0; i <= passage.length-order; i++){
+				parsedSentence="";
+					for(int j = i; j <= i+order-1; j++){
+						parsedSentence = parsedSentence + " " +passage[j];
+					}
+				ngram.add(parsedSentence.trim());	
+			}
+		
+		
+		return ngram;		
 	}
 
+	//Méthode de test
+	public static void main(String[] args){
+		NgramUtil thislol = new NgramUtil();
+		String test = "Je n'ai pas compris ce sujet";
+		System.out.println(thislol.getSequenceSize(test));
+		System.out.println(thislol.generateNgrams(test, 1, 12));
+		System.out.println(thislol.getHistory(test, 3));
+		System.out.println(thislol.decomposeIntoNgrams(test, 3));
+	}
+	
 }
