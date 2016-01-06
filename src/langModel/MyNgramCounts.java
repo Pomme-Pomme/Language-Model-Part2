@@ -1,10 +1,15 @@
 package langModel;
 
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 
@@ -86,37 +91,77 @@ public class MyNgramCounts implements NgramCounts {
 
 	@Override
 	public void incCounts(String ngram) {
-		// TODO Auto-generated method stub
+		if(this.ngramCounts.keySet().contains(ngram)) {
+			this.ngramCounts.put(ngram, ngramCounts.get(ngram)+1);
+		}
+		else {
+			this.ngramCounts.put(ngram, 1);
+		}
 	}
 
 	
 	@Override
 	public void setCounts(String ngram, int counts) {
-		// TODO Auto-generated method stub
+		this.ngramCounts.put(ngram, counts);
 	}
 
 
 	@Override
 	public void scanTextString(String text, int maximalOrder) {
-		// TODO Auto-generated method stub
+		String[] sentences = text.split("\n");
+		ArrayList<String> l = new ArrayList<String>();
+		
+		for(String s : sentences) {
+			l.addAll(NgramUtil.generateNgrams(s, 1, maximalOrder));
+		}
+		for(String ngram : l) {
+			incCounts(ngram);
+		}
 	}
 
 	
 	@Override
 	public void scanTextFile(String filePath, int maximalOrder) {
-		// TODO Auto-generated method stub
+		Scanner sc = new Scanner(filePath);
+		ArrayList<String> l = new ArrayList<String>();
+		
+		while(sc.hasNextLine()) {
+			scanTextString(sc.nextLine(), maximalOrder);
+		}
 	}
 
 	
 	@Override
 	public void writeNgramCountFile(String filePath) {
-		// TODO Auto-generated method stub
+		try {
+			FileWriter fw = new FileWriter(filePath, true);
+			BufferedWriter bw = new BufferedWriter(fw);
+			for(String s : ngramCounts.keySet()){
+				bw.write(s+"\t"+ngramCounts.get(s)+"\n");
+			}
+			bw.flush();
+			bw.close();
+		} catch (IOException ioe) {
+			System.out.println("Erreur: ");
+			ioe.printStackTrace();
+		}
 	}
 
 	
 	@Override
 	public void readNgramCountsFile(String filePath) {
-		// TODO Auto-generated method stub
+		Scanner sc = new Scanner(filePath);
+		
+		while(sc.hasNextLine()) {
+			String line = sc.nextLine();
+			ngramCounts.put(line.split("\t")[0], Integer.parseInt(line.split("\t")[1]));
+		}
+		
 	}
 
+	public static void main(String[] args) {
+		String text = "<s> je ne comprends pas cette phrase </s> \n<s> Meat is good, good is meat </s> \n <s> faut pas écraser les pommes -Lilian Barreteau 2016 </s>";
+		for(String s : text.split("\n"))
+		System.out.println(s);
+	}
 }
