@@ -1,0 +1,17 @@
+<s>	1
+</s>	1
+cette phrase	1
+est de	1
+cette	1
+phrase est	1
+.	1
+<s> cette	1
+de	1
+est	1
+phrase	1
+taille	1
+9	1
+taille 9	1
+. </s>	1
+de taille	1
+9 .	1

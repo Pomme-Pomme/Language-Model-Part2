@@ -2,6 +2,8 @@ package langModel;
 
 
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -122,11 +124,15 @@ public class MyNgramCounts implements NgramCounts {
 	
 	@Override
 	public void scanTextFile(String filePath, int maximalOrder) {
-		Scanner sc = new Scanner(filePath);
-		ArrayList<String> l = new ArrayList<String>();
-		
-		while(sc.hasNextLine()) {
-			scanTextString(sc.nextLine(), maximalOrder);
+		try {
+			Scanner sc = new Scanner(new File(filePath));
+			ArrayList<String> l = new ArrayList<String>();
+			
+			while(sc.hasNextLine()) {
+				scanTextString(sc.nextLine(), maximalOrder);
+			}
+		} catch (FileNotFoundException e){
+			System.out.println(e.getMessage());
 		}
 	}
 
@@ -150,18 +156,18 @@ public class MyNgramCounts implements NgramCounts {
 	
 	@Override
 	public void readNgramCountsFile(String filePath) {
-		Scanner sc = new Scanner(filePath);
+		try{
+		Scanner sc = new Scanner(new File(filePath));
 		
 		while(sc.hasNextLine()) {
 			String line = sc.nextLine();
-			ngramCounts.put(line.split("\t")[0], Integer.parseInt(line.split("\t")[1]));
+			String[] lineCut = line.split("\t");
+			ngramCounts.put(lineCut[0], Integer.parseInt(lineCut[1]));
 		}
 		
+		}catch(FileNotFoundException e){
+			System.out.println(e.getMessage());
+		}
 	}
-
-	public static void main(String[] args) {
-		String text = "<s> je ne comprends pas cette phrase </s> \n<s> Meat is good, good is meat </s> \n <s> faut pas écraser les pommes -Lilian Barreteau 2016 </s>";
-		for(String s : text.split("\n"))
-		System.out.println(s);
-	}
+	
 }
