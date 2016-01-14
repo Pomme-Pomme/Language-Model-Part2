@@ -87,7 +87,11 @@ public class MyNgramCounts implements NgramCounts {
 	
 	@Override
 	public int getCounts(String ngram) {
-		return this.ngramCounts.get(ngram);
+		if(this.ngramCounts.containsKey(ngram)){
+			return this.ngramCounts.get(ngram);
+		}else{
+			return 0;
+		}
 	}
 	
 
@@ -95,9 +99,11 @@ public class MyNgramCounts implements NgramCounts {
 	public void incCounts(String ngram) {
 		if(this.ngramCounts.keySet().contains(ngram)) {
 			this.ngramCounts.put(ngram, ngramCounts.get(ngram)+1);
+			this.nbWordsTotal++;
 		}
 		else {
 			this.ngramCounts.put(ngram, 1);
+			this.nbWordsTotal++;
 		}
 	}
 
@@ -110,6 +116,11 @@ public class MyNgramCounts implements NgramCounts {
 
 	@Override
 	public void scanTextString(String text, int maximalOrder) {
+		
+		if(maximalOrder > this.order){
+			this.setMaximalOrder(maximalOrder);
+		}
+		
 		String[] sentences = text.split("\n");
 		ArrayList<String> l = new ArrayList<String>();
 		
@@ -124,6 +135,11 @@ public class MyNgramCounts implements NgramCounts {
 	
 	@Override
 	public void scanTextFile(String filePath, int maximalOrder) {
+		
+		if(maximalOrder > this.order){
+			this.setMaximalOrder(maximalOrder);
+		}
+		
 		try {
 			Scanner sc = new Scanner(new File(filePath));
 			ArrayList<String> l = new ArrayList<String>();

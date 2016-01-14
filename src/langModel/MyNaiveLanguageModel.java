@@ -1,5 +1,8 @@
 package langModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Class MyNaiveLanguageModel: class implementing the interface LanguageModel by creating a naive language model,
@@ -24,38 +27,58 @@ public class MyNaiveLanguageModel implements LanguageModel {
 	 * Constructor.
 	 */
 	public MyNaiveLanguageModel(){
-		//TODO
+		this.vocabulary = new MyVocabulary();
 	}
 	
 
 	@Override
 	public void setNgramCounts(NgramCounts ngramCounts) {
-		// TODO Auto-generated method stub
-		
+		this.ngramCounts=ngramCounts;
+		this.vocabulary.scanNgramSet(this.ngramCounts.getNgrams());
 	}
 
 	@Override
 	public int getLMOrder() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.ngramCounts.getMaximalOrder();
 	}
 
 	@Override
 	public int getVocabularySize() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.vocabulary.getSize();
 	}
 
 	@Override
 	public Double getNgramProb(String ngram) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		double count = this.ngramCounts.getCounts(ngram);
+		int order = this.getLMOrder();
+
+		if(order == 1){
+			return (count/(this.ngramCounts.getTotalWordNumber()));
+		}
+		else{
+			if((ngram.trim().split("\\s+"))[0] == ngram){
+				return 1.0;
+			}
+			String historique = NgramUtil.getHistory(ngram, order);
+			if((this.ngramCounts.getCounts(historique)) == 0){
+				return 0.0;
+			}else{
+				return (count/(this.ngramCounts.getCounts(historique)));
+			}
+		}
 	}
 
 	@Override
 	public Double getSentenceProb(String sentence) {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> listNgram = NgramUtil.decomposeIntoNgrams(sentence, this.getLMOrder());
+		Double proba = 1.0;
+		
+		for(String s: listNgram){
+			proba = proba * this.getNgramProb(s);
+		}
+
+		return proba;
 	}
 
 }
