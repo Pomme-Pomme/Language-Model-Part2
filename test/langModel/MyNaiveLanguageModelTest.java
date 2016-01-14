@@ -76,10 +76,12 @@ public class MyNaiveLanguageModelTest {
 		mnlm1.setNgramCounts(mnc1);
 		
 		double res = mnlm1.getSentenceProb("<s> Antoine dépend de Thom </s>");
+		System.out.println(res);
 		assertEquals(res, 0, 0.0001);
 		res = mnlm1.getSentenceProb("<s> Elle écoute </s>");
-		assertEquals(res, 27/(Math.pow(20, 4)), 0.0001);
-		
+		System.out.println(res);
+		assertEquals(res, 27/(Math.pow(20, 4)), 0.0000000001);
+		double test =  27/(Math.pow(20, 4));
 		
 		LanguageModel mnlm2 = new MyNaiveLanguageModel();
 		MyNgramCounts mnc2 = new MyNgramCounts();
@@ -88,14 +90,16 @@ public class MyNaiveLanguageModelTest {
 		mnc2.scanTextString(sentence2, 2);
 		mnc2.scanTextString(sentence3, 2);
 		
+		
 		mnlm2.setNgramCounts(mnc2);
-	
-		res = mnlm1.getSentenceProb("<s> Antoine dépend de Thom </s>");
+		
+		res = mnlm2.getSentenceProb("<s> Antoine dépend de Thom </s>");
+		System.out.println(res);
 		assertEquals(res, 0, 0.0001);
-		res = mnlm1.getSentenceProb("<s> Elle écoute une chanson </s>");
-		assertEquals(res, 1*(1/3)*1*(2/3)*(1/2)*(1/2) , 0.0001);
-		
-		
+		res = mnlm2.getSentenceProb("<s> Elle écoute une chanson </s>");
+		System.out.println(res);
+		assertEquals(res, 1.0*(1.0/3.0)*(1.0)*(2.0/3.0)*(1.0/2.0)*(1.0/2.0) , 0.000000000001);
+				
 	}
 	
 	

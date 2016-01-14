@@ -17,14 +17,14 @@ public class MyLaplaceLanguageModel extends MyNaiveLanguageModel {
 
 		
 		if(order == 1){
-			return ((count+1)/((this.ngramCounts.getTotalWordNumber()+this.getVocabularySize())));
+			return ((count+1.0)/((this.ngramCounts.getTotalWordNumber()+this.getVocabularySize())));
 		}
 		else{
 			if((ngram.trim().split("\\s+"))[0] == ngram){
 				return 1.0;
 			}
 			String historique = NgramUtil.getHistory(ngram, order);
-			return ((count+1)/((this.ngramCounts.getCounts(historique)+this.getVocabularySize())));
+			return ((count+1.0)/((this.ngramCounts.getCounts(historique)+this.getVocabularySize())));
 		}
 	}
 }

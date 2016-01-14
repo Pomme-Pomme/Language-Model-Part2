@@ -45,6 +45,7 @@ public class MyNgramCounts implements NgramCounts {
 	 */
 	public MyNgramCounts(){
 		ngramCounts = new HashMap<String, Integer>();
+		this.order=1;
 	}
 
 
@@ -117,7 +118,7 @@ public class MyNgramCounts implements NgramCounts {
 	@Override
 	public void scanTextString(String text, int maximalOrder) {
 		
-		if(maximalOrder > this.order){
+		if(maximalOrder > this.order){	
 			this.setMaximalOrder(maximalOrder);
 		}
 		

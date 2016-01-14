@@ -26,20 +26,20 @@ public class MyLaplaceLanguageModelTest {
 	
 		
 		double res = mnlm1.getNgramProb("<s>");
-		assertEquals(res, (double)4/32, 0.0001);
+		assertEquals(res, 4.0/32.0, 0.00000001);
 		res = mnlm1.getNgramProb("une");
-		assertEquals(res, (double)3/32, 0.0001);
+		assertEquals(res, 3.0/32.0, 0.00000001);
 		res = mnlm1.getNgramProb("pomme");
-		assertEquals(res, (double)1/32, 0.0001);
+		assertEquals(res, 1.0/32.0, 0.00000001);
 		
 		res = mnlm1.getNgramProb("<s>");
-		assertEquals(res, (double)4/32, 0.0001);
+		assertEquals(res, 4.0/32.0, 0.00000001);
 		res = mnlm1.getNgramProb("Elle");
-		assertEquals(res, (double)2/32, 0.0001);
+		assertEquals(res, 2.0/32.0, 0.00000001);
 		res = mnlm1.getNgramProb("écoute");
-		assertEquals(res, (double)4/32, 0.0001);
+		assertEquals(res, 4.0/32.0, 0.00000001);
 		res = mnlm1.getNgramProb("</s>");
-		assertEquals(res, (double)4/32, 0.0001);
+		assertEquals(res, 4.0/32.0, 0.00000001);
 		
 		
 		
@@ -53,13 +53,13 @@ public class MyLaplaceLanguageModelTest {
 		mnlm2.setNgramCounts(mnc2);
 		
 		res = mnlm2.getNgramProb("<s>");
-		assertEquals(res, (double)1.0, 0.0001);
+		assertEquals(res, (double)1.0, 0.00000001);
 		res = mnlm2.getNgramProb("<s> Antoine");
-		assertEquals(res, (double)2/15, 0.0001);
+		assertEquals(res, (double)2/15, 0.00000001);
 		res = mnlm2.getNgramProb("une autre");
-		assertEquals(res, (double)2/14, 0.0001);
+		assertEquals(res, (double)2/14, 0.00000001);
 		res = mnlm1.getNgramProb("une pomme");
-		assertEquals(res, (double)1/32, 0.0001);
+		assertEquals(res, (double)1/32, 0.00000001);
 	}
 
 	
@@ -78,10 +78,13 @@ public class MyLaplaceLanguageModelTest {
 		
 		double res = mnlm1.getSentenceProb("<s> Antoine dépend de Thom </s>");
 		System.out.println(res);
-		assertEquals(res, 0, 0.0001);
-		res = mnlm1.getSentenceProb("<s> Elle écoute une chanson</s>");
+		assertEquals(res, (4.0/32.0)*(2.0/32.0)*(1.0/32.0)*(2.0/32.0)*(2.0/32.0)*(4.0/32.0), 0.00000001);
+		
+		System.out.println("///////////////");
+		
+		res = mnlm1.getSentenceProb("<s> Elle écoute une chanson </s>");
 		System.out.println(res);
-		assertEquals(res, (4/32)*(2/32)*(4/32)*(3/32)*(2/32)*(4/32), 0.0001);
+		assertEquals(res, (4.0/32.0)*(2.0/32.0)*(4.0/32.0)*(3.0/32.0)*(3.0/32.0)*(4.0/32.0), 0.00000001);
 		
 		
 		LanguageModel mnlm2 = new MyLaplaceLanguageModel();
@@ -93,12 +96,12 @@ public class MyLaplaceLanguageModelTest {
 		
 		mnlm2.setNgramCounts(mnc2);
 	
-		res = mnlm1.getSentenceProb("<s> Antoine dépend de Thom </s>");
+		res = mnlm2.getSentenceProb("<s> Antoine dépend de Thom </s>");
 		System.out.println(res);
-		assertEquals(res, (2/12)*(2/15)*(1/12)*(1/12)*(1/13)*(2/15), 0.0001);
-		res = mnlm1.getSentenceProb("<s> Elle écoute une chanson </s>");
+		assertEquals(res, 1.0*(2.0/15.0)*(1.0/13.0)*(1.0/12.0)*(1.0/13.0)*(2.0/13.0), 0.00000001);
+		res = mnlm2.getSentenceProb("<s> Elle écoute une chanson </s>");
 		System.out.println(res);
-		assertEquals(res, (2/12)*(2/15)*(2/12)*(3/15)*(2/14)*(2/14) , 0.0001);
+		assertEquals(res, 1.0*(2.0/15.0)*(2.0/13.0)*(3.0/15.0)*(2.0/14.0)*(2.0/14.0) , 0.00000001);
 		
 		
 	}
