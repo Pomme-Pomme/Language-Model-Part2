@@ -50,30 +50,40 @@ public class MyNaiveLanguageModel implements LanguageModel {
 	@Override
 	public Double getNgramProb(String ngram) {
 		
+		//On prend le nombre d'occurence du ngram
 		double count = this.ngramCounts.getCounts(ngram);
+		//On prend l'ordre
 		int order = this.getLMOrder();
 
+		//Si l'ordre est de un, on fait la méthode pour les unigrammes
 		if(order == 1){
+			//On renvoie le nombre d'occurence sur le nombre de mot total
 			return (count/(this.ngramCounts.getTotalWordNumber()));
 		}
 		else{
+			//Si le ngram est d'une taille de un, on renvoie un (premier ngram)
 			if((ngram.trim().split("\\s+"))[0] == ngram){
 				return 1.0;
-			}
+			}//sinon on prend l'historique du mot
 			String historique = NgramUtil.getHistory(ngram, order);
-			if((this.ngramCounts.getCounts(historique)) == 0){
-				return 0.0;
-			}else{
-				return (count/(this.ngramCounts.getCounts(historique)));
-			}
+			
+				if((this.ngramCounts.getCounts(historique)) == 0){
+					//Si l'historique n'existe pas, on renvoie 1, pour ne pas faire de division par zero
+					return count/(this.ngramCounts.getTotalWordNumber());
+				}else{
+					//Sinon, on renvoie le nombre d'occurence sur l'historique
+					return (count/(this.ngramCounts.getCounts(historique)));
+				}
 		}
 	}
 
 	@Override
 	public Double getSentenceProb(String sentence) {
+		//On découpe la phrase en ngram
 		List<String> listNgram = NgramUtil.decomposeIntoNgrams(sentence, this.getLMOrder());
 		Double proba = 1.0;
 		
+		//Pour chaque phrase, on multiplie la proba totale avec la proba de chaque ngram
 		for(String s: listNgram){
 			proba = proba * this.getNgramProb(s);
 		}
