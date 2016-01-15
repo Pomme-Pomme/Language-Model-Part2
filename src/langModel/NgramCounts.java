@@ -27,6 +27,7 @@ public interface NgramCounts {
 	 */
 	public int getMaximalOrder ();
 	
+	public void setMaximalOrder (int order);
 	
 	/**
 	 * Getter of the data structure which maps the n-grams to the counts

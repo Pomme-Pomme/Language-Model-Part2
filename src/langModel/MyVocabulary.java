@@ -58,7 +58,9 @@ public class MyVocabulary implements Vocabulary {
 
 	@Override
 	public void scanNgramSet(Set<String> ngramSet) {
+		//Pour chaque Ngram
 		for(String s : ngramSet){
+			//Si il n'y a ni espace, ni tabulation, on ajoute le mot
 			if(!s.contains(" ") && !s.contains("\t")) {
 				vocabulary.add(s);
 			}
@@ -70,8 +72,10 @@ public class MyVocabulary implements Vocabulary {
 		try{
 			Scanner sc = new Scanner(new File(filePath));
 			
+			//Pour chaque lgne du fichier
 			while(sc.hasNextLine()) {
 				String line = sc.nextLine();
+				//On ajoute le mot
 				vocabulary.add(line);
 			}
 			
@@ -85,6 +89,7 @@ public class MyVocabulary implements Vocabulary {
 		try {
 			FileWriter fw = new FileWriter(filePath, true);
 			BufferedWriter bw = new BufferedWriter(fw);
+			//On écrit chaque mot du vocabulaire dans le buffer
 			for(String s : vocabulary){
 				bw.write(s+"\n");
 			}

@@ -80,5 +80,27 @@ public class MyNaiveLanguageModel implements LanguageModel {
 
 		return proba;
 	}
+	
+	/// Ajouté pour choisir ordre
+	
+	
+	public Double getSentenceProb2(String sentence, int orderHere) {
+		List<String> listNgram = NgramUtil.decomposeIntoNgrams(sentence, this.getLMOrder());
+		Double proba = 1.0;
+		
+		int order = this.getLMOrder();
+		if(orderHere<order){
+			this.ngramCounts.setMaximalOrder(orderHere);
+		}
+		
+		
+		for(String s: listNgram){
+			proba = proba * this.getNgramProb(s);
+		}
+
+		this.ngramCounts.setMaximalOrder(order);
+		
+		return proba;
+	}
 
 }

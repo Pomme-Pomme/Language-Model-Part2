@@ -56,22 +56,25 @@ public class NgramUtil {
 	 */
 	public static List<String> generateNgrams (String sentence, int minOrder, int maxOrder) {
 		
+		//On découpe la phrase
 		String[] passage = (sentence.trim()).split("\\s+");
 		
+		//On créer une liste de string qui contiendra les ngram
 		ArrayList<String> ngram = new ArrayList<String>();
 		
-		
-		
+		//Pour chaque ordre où on veut créer des ngram
 		for(int n=minOrder; n<=maxOrder; n++){
+			//Pour chaque mot
 			for(int i = 0; i <= passage.length-n; i++){
 				String parsedSentence="";
+					//On genère un groupe de mot de la longueur de l'ordre traité 
 					for(int j = i; j <= i+n-1; j++){
 						parsedSentence = parsedSentence + " " +passage[j];
 					}
+				//On ajoute ce groupe de mot	
 				ngram.add(parsedSentence.trim());	
 			}
 		}
-		
 		return ngram;
 	}
 
@@ -94,7 +97,11 @@ public class NgramUtil {
 		String[] passage = (ngram.trim()).split("\\s+");
 		String solution = "";
 		
+		//Si le groupe de mot est plus grand que l'ordre, on a un historique
 		if(passage.length>=order){
+			//On ajoute l'historique (order-1 mots d'avant)
+			//i=passage.length-2 = l'avant dernier mot
+			//passage.length-order = le dernier mot dans l'historique
 			for(int i=passage.length-2; i >= passage.length-order; i--){
 				solution = passage[i] + " " + solution;
 			}
@@ -120,24 +127,30 @@ public class NgramUtil {
 	 */
 	public static List<String> decomposeIntoNgrams (String sentence, int order) {
 		
+		//On créer une liste de string qui contiendra les ngram
 		String[] passage = (sentence.trim()).split("\\s+");
 		String parsedSentence="";
 		
 		ArrayList<String> ngram = new ArrayList<String>();
 		
-		int nbrBoucle = Math.min(order, passage.length+1);
+		int nbrBoucle = Math.min(order, passage.length);
 		
-		
+			//Pour les premier groupes de mot à générer
+			//en order 3 par exemple, on commence avec le premier mot seul, et un groupe de mot avec les dux premier
 			for(int l=1;l<nbrBoucle;l++){
 				parsedSentence="";
-				for(int b=0; b<l && b<passage.length; b++){
-					parsedSentence = parsedSentence + " " +passage[b];
-				}
+					//On prend les groupes plus petit à gérer
+					for(int b=0; b<l && b<passage.length; b++){
+						parsedSentence = parsedSentence + " " +passage[b];
+					}
 				ngram.add(parsedSentence.trim());
 			}
 		
+			//Pour les groupes de mot de taille order
+			//On parcours tous sans les dernier pour ne pas dépasser la taille du tableau lors du traitement
 			for(int i = 0; i <= passage.length-order; i++){
 				parsedSentence="";
+					//On prend un groupe de mot de taille order et commencant par celui traité
 					for(int j = i; j <= i+order-1; j++){
 						parsedSentence = parsedSentence + " " +passage[j];
 					}

@@ -57,7 +57,7 @@ public class MyNgramCounts implements NgramCounts {
 	 * 
 	 * @param order the maximal order of n-grams considered.
 	 */
-	private void setMaximalOrder (int order) {
+	public/*private, pour méthode avec choix d'order*/ void setMaximalOrder (int order) {
 		this.order=order;
 	}
 
@@ -98,12 +98,17 @@ public class MyNgramCounts implements NgramCounts {
 
 	@Override
 	public void incCounts(String ngram) {
+		//si on a le ngram
 		if(this.ngramCounts.keySet().contains(ngram)) {
+			//on augmente de un son nombre d'occurence
 			this.ngramCounts.put(ngram, ngramCounts.get(ngram)+1);
+			//et on augmente le nmbre de mot total
 			this.nbWordsTotal++;
-		}
+		}//si on avait pas ce mot
 		else {
+			//on l'ajoute
 			this.ngramCounts.put(ngram, 1);
+			//et on augmente le nombre de mot total
 			this.nbWordsTotal++;
 		}
 	}
@@ -118,16 +123,21 @@ public class MyNgramCounts implements NgramCounts {
 	@Override
 	public void scanTextString(String text, int maximalOrder) {
 		
+		//Si on a un nouvel ordre, on le met à jour
 		if(maximalOrder > this.order){	
 			this.setMaximalOrder(maximalOrder);
 		}
 		
+		//On découpe la phrase
 		String[] sentences = text.split("\n");
 		ArrayList<String> l = new ArrayList<String>();
 		
+		//Pour chaque phrase
 		for(String s : sentences) {
+			//On génère les ngram avec cette phrase et on les ajoutes à la liste de passage
 			l.addAll(NgramUtil.generateNgrams(s, 1, maximalOrder));
 		}
+		//On incrémente chaque ngram généré
 		for(String ngram : l) {
 			incCounts(ngram);
 		}
@@ -137,15 +147,18 @@ public class MyNgramCounts implements NgramCounts {
 	@Override
 	public void scanTextFile(String filePath, int maximalOrder) {
 		
+		//Si on a un nouvel ordre, on le met à jour
 		if(maximalOrder > this.order){
 			this.setMaximalOrder(maximalOrder);
 		}
 		
 		try {
+			//On lit le fichier
 			Scanner sc = new Scanner(new File(filePath));
-			ArrayList<String> l = new ArrayList<String>();
 			
+			//Pour chaque ligne
 			while(sc.hasNextLine()) {
+				//On génère les ngram et on les incrémente
 				scanTextString(sc.nextLine(), maximalOrder);
 			}
 		} catch (FileNotFoundException e){
@@ -153,17 +166,22 @@ public class MyNgramCounts implements NgramCounts {
 		}
 	}
 
-	
+
 	@Override
 	public void writeNgramCountFile(String filePath) {
 		try {
+			//crée un filewriter CaD un Objet pour écrire dans fichier filepath
 			FileWriter fw = new FileWriter(filePath, true);
+			//on crée un buffer en écriture sur ce fichier
 			BufferedWriter bw = new BufferedWriter(fw);
+			//pour chaque nGram on l'écrit dans le buffer et on le fait suivre de son nombre d'occurences
 			for(String s : ngramCounts.keySet()){
 				bw.write(s+"\t"+ngramCounts.get(s)+"\n");
 			}
+			// on vide le buffer si il reste des données dedans
 			bw.flush();
 			bw.close();
+			//la manipulation des Filewriter et BufferedWriter peut lancer des exceptions
 		} catch (IOException ioe) {
 			System.out.println("Erreur: ");
 			ioe.printStackTrace();
@@ -174,12 +192,26 @@ public class MyNgramCounts implements NgramCounts {
 	@Override
 	public void readNgramCountsFile(String filePath) {
 		try{
+		//On lit le fichier	
 		Scanner sc = new Scanner(new File(filePath));
 		
+		//Pour chaque ligne (composé du ngram et du nombre d'occurence, séparés par une tabulation)
 		while(sc.hasNextLine()) {
 			String line = sc.nextLine();
+			//On découpe la ligne au niveau de la tabulation
 			String[] lineCut = line.split("\t");
-			ngramCounts.put(lineCut[0], Integer.parseInt(lineCut[1]));
+			
+			//Si on a un nouvel ordre, on le met à jour
+			if(lineCut[0].split("\\s+").length > order){
+				this.order = lineCut[0].split("\\s+").length ;
+			}
+			
+			//Si on a déjà ce ngram, on additionne son nombre d'occurence
+			if(ngramCounts.keySet().contains(lineCut[0])){
+				ngramCounts.put(lineCut[0],ngramCounts.get(lineCut[0])+ Integer.parseInt(lineCut[1]));
+			}else{//Sinon, on l'ajoute
+				ngramCounts.put(lineCut[0], Integer.parseInt(lineCut[1]));
+			}
 		}
 		
 		}catch(FileNotFoundException e){

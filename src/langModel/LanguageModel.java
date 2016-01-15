@@ -53,4 +53,16 @@ public interface LanguageModel {
 	 * @return the probability of the given sentence.
 	 */
 	public Double getSentenceProb (String sentence);
+	
+	
+	/**
+	 * Same as getSentenceProb but you can choose the order, and not the 
+	 * created one
+	 * @param sentence the sentence whose probability to compute.
+	 * @param order you want
+	 * @return the probability of the given sentence.
+	 */
+	public Double getSentenceProb2 (String sentence, int order);
+	
+	
 }
